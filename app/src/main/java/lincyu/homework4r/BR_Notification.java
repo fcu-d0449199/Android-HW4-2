@@ -18,15 +18,31 @@ public class BR_Notification extends BroadcastReceiver {
 		String name = intent.getStringExtra("KEY_NAME");
 
 		Intent newintent = new Intent();
+		newintent = intent;
 		newintent.setClass(context, GreetingActivity.class);
 
 		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, newintent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-		Notification notify = newNotification(context, pendingIntent,
+		Notification notify =  null;
+		//notify.flags=Notification.FLAG_AUTO_CANCEL;
+
+		notify = newNotification(context, pendingIntent,
 				"(New) Broadcast is received.", name);
 
 		NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-		notificationManager.notify(id++, notify);
+
+		notificationManager.notify(id, notify);
+	}
+
+	@SuppressWarnings("deprecation")
+	private Notification oldNotification(
+			Context context, PendingIntent pi,
+			String title, String msg) {
+
+		Notification notify = new Notification(
+				R.mipmap.ic_launcher, title,
+				System.currentTimeMillis());
+		return notify;
 	}
 
 	@SuppressLint("NewApi")
